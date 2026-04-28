@@ -14,7 +14,7 @@
 
         <div class="menu-card" @click="currentMode = 'nomen-verb'">
           <div class="card-icon">📚</div>
-          <h2>Nomen-Verb</h2>
+          <h2>Nomen-Verb-Verbindungen</h2>
           <p>Kifejezések és példamondatok</p>
           <button class="select-btn">Indítás</button>
         </div>
