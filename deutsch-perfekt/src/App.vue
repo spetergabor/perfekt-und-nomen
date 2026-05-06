@@ -18,6 +18,13 @@
           <p>Kifejezések és példamondatok</p>
           <button class="select-btn">Indítás</button>
         </div>
+
+        <div class="menu-card" @click="currentMode = 'adjektiv'">
+          <div class="card-icon">🎨</div>
+          <h2>Adjektivdeklination</h2>
+          <p>Névelő + Melléknév ragozás</p>
+          <button class="select-btn">Indítás</button>
+        </div>
       </div>
     </div>
 
@@ -28,6 +35,7 @@
       
       <VerbPractice v-if="currentMode === 'perfekt'" />
       <NomenVerbPractice v-if="currentMode === 'nomen-verb'" />
+      <AdjektivPractice v-if="currentMode === 'adjektiv'" />
     </div>
   </div>
 </template>
@@ -35,23 +43,25 @@
 <script>
 import VerbPractice from "./components/VerbPractice.vue";
 import NomenVerbPractice from "./components/NomenVerbPractice.vue";
+import AdjektivPractice from "./components/AdjektivPractice.vue";
 
 export default {
   name: "App",
   components: {
     VerbPractice,
     NomenVerbPractice,
+    AdjektivPractice,
   },
   data() {
     return {
-      currentMode: null,
+      currentMode: null, // 'perfekt', 'nomen-verb', vagy 'adjektiv'
     };
   },
 };
 </script>
 
 <style>
-/* 1. Alapbeállítások a háttérnek */
+/* ALAPSTÍLUSOK */
 body, html {
   margin: 0;
   padding: 0;
@@ -62,64 +72,50 @@ body, html {
   background-attachment: fixed;
 }
 
-/* 2. Ez a blokk felel a tökéletes középre igazításért */
 #app {
   min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Függőleges közép */
-  align-items: center;     /* Vízszintes közép */
+  justify-content: center;
+  align-items: center;
   padding: 20px;
   box-sizing: border-box;
 }
 
-/* 3. Gyakorló konténer */
+/* KONTEINER */
 .practice-container {
   display: flex;
   flex-direction: column;
   align-items: center; 
   width: 100%;
   max-width: 600px;
-  position: relative; /* Szükséges az abszolút pozícionált gombhoz */
+  position: relative;
 }
 
-/* 4. APPLE STÍLUSÚ VISSZA GOMB */
+/* VISSZA GOMB */
 .back-button {
   position: absolute;
-  top: -50px; /* A kártya felett helyezkedik el */
-  left: 0;    /* A kártya bal széléhez igazítva */
-  
+  top: -50px;
+  left: 0;
   background: none;
   border: none;
   padding: 0;
   margin: 0;
   cursor: pointer;
-  
-  /* iOS kék szín */
   color: #ffffff; 
   font-size: 18px;
   font-weight: 400;
-  
   display: flex;
   align-items: center;
   transition: opacity 0.2s ease;
 }
 
-/* iOS-szerű nyíl ikon hozzáadása */
-.back-button::before {
-  font-size: 32px;
-  line-height: 0;
-  margin-right: 4px;
-  margin-top: -4px;
-}
-
 .back-button:hover {
   opacity: 0.6;
-  background: none;
 }
 
-/* 5. Kezdőoldal elemei */
+/* MENÜ ELEMEI */
 h1 {
   color: #ffffff;
   margin-bottom: 10px;
@@ -148,6 +144,7 @@ h1 {
   cursor: pointer;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  text-align: center;
 }
 
 .menu-card:hover {
@@ -157,6 +154,17 @@ h1 {
 .card-icon {
   font-size: 40px;
   margin-bottom: 15px;
+}
+
+.menu-card h2 {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin: 10px 0;
+}
+
+.menu-card p {
+  font-size: 0.9rem;
+  color: #7f8c8d;
 }
 
 .select-btn {

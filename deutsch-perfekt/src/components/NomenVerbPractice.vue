@@ -96,7 +96,7 @@ export default {
   { nomen: "zum Abschluss", verb: "bringen", meaning: "abschließen", example: "Ich möchte dieses Projekt endlich zum Abschluss bringen.", translation: "Szeretném ezt a projektet végre lezárni." },
   { nomen: "zum Ausdruck", verb: "bringen", meaning: "etwas ausdrücken", example: "Ich möchte damit zum Ausdruck bringen, dass mir das nicht gefällt.", translation: "Szeretném kifejezésre juttatni, hogy ez nem tetszik nekem." },
   { nomen: "zur Sprache", verb: "bringen", meaning: "ein Thema ansprechen", example: "Ich finde es gut, dass du dieses Thema zur Sprache gebracht hast.", translation: "Jónak tartom, hogy szóba hoztad ezt a témát." },
-  { nomen: "zur Vernunft", verb: "bringen", meaning: "jemanden vernünftig machen", example: "Kannst du deinen Bruder bitte zur Vernunft bringen?", translation: "Észhez tudnád téríteni a tettedet, kérlek?" },
+  { nomen: "zur Vernunft", verb: "bringen", meaning: "jemanden vernünftig machen", example: "Kannst du deinen Bruder bitte zur Vernunft bringen?", translation: "Észhez tudnád téríteni a testvéredet, kérlek?" },
   { nomen: "zur Verzweiflung", verb: "bringen", meaning: "jemanden aufregen", example: "Das alles bringt mich zur Verzweiflung.", translation: "Ez az egész kétségbeesésbe kerget." },
   { nomen: "Verbesserungen", verb: "durchführen", meaning: "verbessern", example: "An dem Produkt müssen Verbesserungen durchgeführt werden.", translation: "A terméken javításokat kell eszközölni." },
   { nomen: "eine Pflicht", verb: "erfüllen", meaning: "seine Aufgaben machen", example: "Als Elternteil muss man viele Pflichten erfüllen.", translation: "Szülőként sok kötelességet kell teljesíteni." },
