@@ -1,6 +1,49 @@
 <template>
   <div class="adjektiv-practice">
+  <div class="adjektiv-practice">
     <h1>Adjektivdeklination</h1>
+    
+    <button v-if="selectedCase && !showStatistics" @click="showTable = true" class="info-btn">
+      ℹ️ Táblázat
+    </button>
+
+    <transition name="fade">
+      <div v-if="showTable" class="modal-overlay" @click.self="showTable = false">
+        <div class="modal-content">
+          <button class="close-modal" @click="showTable = false">×</button>
+          <h2>Adjektivdeklinationen</h2>
+          <div class="table-scroll">
+            <h3>Schwache Deklination (Határozott névelő)</h3>
+            <table>
+              <tr><th>Kasus</th><th>Maskulin</th><th>Feminin</th><th>Neutral</th><th>Plural</th></tr>
+              <tr><td>Nom.</td><td>-e</td><td>-e</td><td>-e</td><td>-en</td></tr>
+              <tr><td>Akk.</td><td>-en</td><td>-e</td><td>-e</td><td>-en</td></tr>
+              <tr><td>Dat.</td><td>-en</td><td>-en</td><td>-en</td><td>-en</td></tr>
+              <tr><td>Gen.</td><td>-en</td><td>-en</td><td>-en</td><td>-en</td></tr>
+            </table>
+
+            <h3>Gemischte Deklination (Határozatlan névelő)</h3>
+            <table>
+              <tr><th>Kasus</th><th>Maskulin</th><th>Feminin</th><th>Neutral</th><th>Plural</th></tr>
+              <tr><td>Nom.</td><td>-er</td><td>-e</td><td>-es</td><td>-en</td></tr>
+              <tr><td>Akk.</td><td>-en</td><td>-e</td><td>-es</td><td>-en</td></tr>
+              <tr><td>Dat.</td><td>-en</td><td>-en</td><td>-en</td><td>-en</td></tr>
+              <tr><td>Gen.</td><td>-en</td><td>-en</td><td>-en</td><td>-en</td></tr>
+            </table>
+
+            <h3>Starke Deklination (Névelő nélkül)</h3>
+            <table>
+              <tr><th>Kasus</th><th>Maskulin</th><th>Feminin</th><th>Neutral</th><th>Plural</th></tr>
+              <tr><td>Nom.</td><td>-er</td><td>-e</td><td>-es</td><td>-e</td></tr>
+              <tr><td>Akk.</td><td>-en</td><td>-e</td><td>-es</td><td>-e</td></tr>
+              <tr><td>Dat.</td><td>-em</td><td>-er</td><td>-em</td><td>-en</td></tr>
+              <tr><td>Gen.</td><td>-en</td><td>-er</td><td>-en</td><td>-er</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </div>
 
     <div v-if="!selectedCase" class="case-selector">
       <p class="subtitle">Válaszd ki, melyik esetet szeretnéd gyakorolni:</p>
@@ -82,6 +125,7 @@ export default {
   name: "AdjektivPractice",
   data() {
     return {
+      showTable: false, // Ezzel vezéreljük a modal láthatóságát
       selectedCase: null,
 allQuestions: [
   // --- NOMINATIV (Alanyeset) ---
@@ -321,4 +365,73 @@ button { width: 100%; padding: 15px 35px; border-radius: 50px; border: none; fon
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
+/* INFO GOMB */
+.info-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: auto;
+  padding: 8px 15px;
+  background: rgba(52, 152, 219, 0.3);
+  border: 1px solid #3498db;
+  font-size: 0.9rem;
+  border-radius: 10px;
+}
+
+/* MODAL STÍLUSOK */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  color: #2c3e50;
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 85vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 30px;
+  background: none; border: none;
+  color: #2c3e50; cursor: pointer;
+  width: auto; padding: 0;
+}
+
+.table-scroll {
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+h3 { margin: 20px 0 10px 0; color: #3498db; font-size: 1.1rem; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th { background-color: #f8f9fa; font-weight: bold; }
 </style>
