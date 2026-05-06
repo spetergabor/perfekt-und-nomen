@@ -65,8 +65,13 @@
         <div class="stats-summary">
           <p>Helyes: <span class="correct-text">{{ correctAnswersInRound }}</span> | Helytelen: <span class="wrong-text">{{ incorrectAnswersInRound }}</span></p>
         </div>
-        <button @click="resetToSelector" class="btn-popup-action">Másik eset választása</button>
-        <button @click="startRound" class="btn-popup-action secondary">Új kör ugyanezzel</button>
+<button @click="startRound(true)" class="btn-popup-action secondary">
+  Új kör ugyanezzel
+</button>
+
+<button @click="resetToSelector" class="btn-popup-action">
+  Másik eset választása
+</button>
       </div>
     </div>
   </div>
@@ -189,6 +194,7 @@ allQuestions: [
   { context: "Das ist", elements: { article: "das", adj: "schönst", noun: "Haus" }, correct: "das schönste Haus", case: "Nominativ", rule: "Superlativ" }
 ],
       filteredDeck: [],
+      currentRoundBatch: [],
       roundHistory: [],
       currentQuestion: null,
       userAnswer: "",
@@ -209,24 +215,29 @@ allQuestions: [
     }
   },
   methods: {
-    selectCase(c) {
-      this.selectedCase = c;
-      this.startRound();
-    },
     shuffle(array) {
       return [...array].sort(() => Math.random() - 0.5);
     },
-    startRound() {
+    selectCase(c) {
+      this.selectedCase = c;
+      this.startRound(false);
+    },
+    startRound(isRepeat = false) {
       this.roundHistory = [];
       this.correctAnswersInRound = 0;
       this.incorrectAnswersInRound = 0;
       this.showStatistics = false;
 
-      let pool = this.selectedCase === 'Mixed' 
-        ? [...this.allQuestions] 
-        : this.allQuestions.filter(q => q.case === this.selectedCase);
+      if (!isRepeat) {
+        let pool = this.selectedCase === 'Mixed' 
+          ? [...this.allQuestions] 
+          : this.allQuestions.filter(q => q.case === this.selectedCase);
 
-      this.filteredDeck = this.shuffle(pool);
+        let shuffledPool = this.shuffle(pool);
+        this.currentRoundBatch = shuffledPool.slice(0, this.totalQuestionsInRound);
+      }
+
+      this.filteredDeck = this.shuffle(this.currentRoundBatch);
       this.setNextQuestion();
     },
     setNextQuestion() {
@@ -239,7 +250,9 @@ allQuestions: [
       this.isAnswered = false;
       this.userAnswer = "";
       this.isCorrect = null;
-      this.$nextTick(() => { if (this.$refs.answerInput) this.$refs.answerInput.focus(); });
+      this.$nextTick(() => { 
+        if (this.$refs.answerInput) this.$refs.answerInput.focus(); 
+      });
     },
     checkAnswer() {
       if (this.isAnswered || !this.userAnswer.trim()) return;
@@ -261,102 +274,50 @@ allQuestions: [
     resetToSelector() {
       this.selectedCase = null;
       this.showStatistics = false;
+      this.currentRoundBatch = [];
     }
   }
 };
 </script>
 
 <style scoped>
-/* ALAP KONTÉNER */
-.adjektiv-practice {
-  width: 100%;
-  max-width: 600px;
-  padding: 40px 25px;
-  text-align: center;
-  box-sizing: border-box;
-}
-
+/* A stílusok maradnak az általad küldöttek */
+.adjektiv-practice { width: 100%; max-width: 600px; padding: 40px 25px; text-align: center; box-sizing: border-box; }
 h1 { color: #ffffff; font-size: 1.8rem; margin-bottom: 25px; }
-
-/* ESETVÁLASZTÓ */
 .case-selector { animation: fadeIn 0.5s ease; }
 .subtitle { color: #bdc3c7; margin-bottom: 30px; }
-.case-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  max-width: 400px;
-  margin: 0 auto;
-}
-.btn-case {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 15px;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
+.case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 400px; margin: 0 auto; }
+.btn-case { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 15px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.2s ease; }
 .btn-case:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
 .btn-mixed { grid-column: span 2; background: #3498db; border: none; }
 .case-indicator { color: #3498db; margin-bottom: 10px; text-transform: uppercase; font-size: 0.8rem; font-weight: bold; }
-
-/* PROGRESS BAR */
 .progress-container { max-width: 400px; margin: 0 auto 30px auto; }
-.progress-bar {
-  width: 100%; height: 8px;
-  background: rgba(224, 230, 237, 0.2);
-  border-radius: 4px; overflow: hidden; margin-bottom: 8px;
-}
+.progress-bar { width: 100%; height: 8px; background: rgba(224, 230, 237, 0.2); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
 .progress-fill { height: 100%; background: #2ecc71; transition: width 0.3s ease; }
 .progress-text { font-size: 0.9rem; color: #ffffff; margin: 0; }
-
-/* QUESTION CARD */
 .question-card { padding: 10px; margin-bottom: 25px; }
 .adjektiv-display { font-size: 2.2rem; color: #ffffff; margin: 0; font-weight: bold; }
 .meaning { font-style: italic; color: #bdc3c7; margin-bottom: 10px; font-size: 1.2rem; }
-
-/* INPUT & BUTTONS */
-.input-wrapper, .button-group { max-width: 400px; margin: 0 auto; }
-input {
-  width: 100%; padding: 15px 20px; border-radius: 50px;
-  border: 2px solid rgba(223, 230, 233, 0.3); background: white;
-  font-size: 18px; outline: none; transition: all 0.2s ease;
-  box-sizing: border-box; margin-bottom: 15px;
-}
+input { width: 100%; padding: 15px 20px; border-radius: 50px; border: 2px solid rgba(223, 230, 233, 0.3); background: white; font-size: 18px; outline: none; transition: all 0.2s ease; box-sizing: border-box; margin-bottom: 15px; }
 input:focus { border-color: #3498db; }
 .input-correct { border-color: #2ecc71 !important; background-color: #eafaf1; }
 .input-wrong { border-color: #e74c3c !important; background-color: #fdf2f2; }
 .input-icon { position: absolute; right: 20px; top: 25px; font-size: 20px; font-weight: bold; }
 .correct-icon { color: #2ecc71; }
 .wrong-icon { color: #e74c3c; }
-
-button {
-  width: 100%; padding: 15px 35px; border-radius: 50px; border: none;
-  font-size: 16px; font-weight: bold; cursor: pointer;
-  transition: background 0.2s ease; color: white; margin-bottom: 10px;
-}
+button { width: 100%; padding: 15px 35px; border-radius: 50px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s ease; color: white; margin-bottom: 10px; }
 .btn-check { background: #2ecc71; }
 .btn-next { background: #3498db; }
-
-/* FEEDBACK */
 .feedback-box { max-width: 400px; margin: 25px auto 0 auto; padding: 20px; border-radius: 15px; backdrop-filter: blur(5px); }
 .fb-correct { background-color: rgba(46, 204, 113, 0.2); border: 1px solid #2ecc71; color: #ffffff; }
 .fb-wrong { background-color: rgba(255, 255, 255, 0.1); border: 2px solid #e74c3c; color: #ffffff; }
 .wrong-highlight { background: #e74c3c; color: white; padding: 10px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; font-size: 1.1rem; }
 .wrong-highlight span { text-decoration: underline; font-size: 1.2rem; }
 .rule-details { text-align: left; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
-
-/* POPUP */
 .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .popup-content { background: white; padding: 40px; border-radius: 20px; width: 400px; text-align: center; color: #2c3e50; }
 .btn-popup-action { background: #2c3e50; margin-top: 20px; }
 .secondary { background: #7f8c8d !important; margin-top: 10px !important; }
-.correct-text { color: #2ecc71; font-weight: bold; }
-.wrong-text { color: #e74c3c; font-weight: bold; }
-
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
