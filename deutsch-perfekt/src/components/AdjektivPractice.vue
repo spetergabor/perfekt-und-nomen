@@ -1,6 +1,5 @@
 <template>
   <div class="adjektiv-practice">
-  <div class="adjektiv-practice">
     <h1>Adjektivdeklination</h1>
     
     <button v-if="selectedCase && !showStatistics" @click="showTable = true" class="info-btn">
@@ -43,7 +42,6 @@
         </div>
       </div>
     </transition>
-  </div>
 
     <div v-if="!selectedCase" class="case-selector">
       <p class="subtitle">Válaszd ki, melyik esetet szeretnéd gyakorolni:</p>
@@ -104,17 +102,18 @@
 
     <div v-if="showStatistics" class="popup-overlay">
       <div class="popup-content">
-        <h2>Kör vége</h2>
+        <h2>{{ correctAnswersInRound === totalQuestionsInRound ? 'Tökéletes!' : 'Kör vége' }}</h2>
         <div class="stats-summary">
           <p>Helyes: <span class="correct-text">{{ correctAnswersInRound }}</span> | Helytelen: <span class="wrong-text">{{ incorrectAnswersInRound }}</span></p>
         </div>
-<button @click="startRound(true)" class="btn-popup-action secondary">
-  Új kör ugyanezzel
-</button>
 
-<button @click="resetToSelector" class="btn-popup-action">
-  Másik eset választása
-</button>
+        <button @click="startRound(correctAnswersInRound !== totalQuestionsInRound)" class="btn-popup-action secondary">
+          {{ correctAnswersInRound === totalQuestionsInRound ? 'Következő kör (új feladatok)' : 'Újrapróbálás ugyanazokkal' }}
+        </button>
+
+        <button @click="resetToSelector" class="btn-popup-action">
+          Másik eset választása
+        </button>
       </div>
     </div>
   </div>
@@ -125,9 +124,9 @@ export default {
   name: "AdjektivPractice",
   data() {
     return {
-      showTable: false, // Ezzel vezéreljük a modal láthatóságát
+      showTable: false,
       selectedCase: null,
-allQuestions: [
+      allQuestions: [
   // --- NOMINATIV (Alanyeset) ---
   { context: "Das ist", elements: { article: "der", adj: "alt", noun: "Schlüssel" }, correct: "der alte Schlüssel", case: "Nominativ", rule: "Határozott (Hímnem)" },
   { context: "Hier ist", elements: { article: "ein", adj: "bequem", noun: "Sessel" }, correct: "ein bequemer Sessel", case: "Nominativ", rule: "Határozatlan (Hímnem)" },
@@ -247,7 +246,7 @@ allQuestions: [
       showStatistics: false,
       correctAnswersInRound: 0,
       incorrectAnswersInRound: 0,
-      totalQuestionsInRound: 5 // Rövidebb körök az intenzív gyakorláshoz
+      totalQuestionsInRound: 5
     };
   },
   computed: {
@@ -273,6 +272,7 @@ allQuestions: [
       this.showStatistics = false;
 
       if (!isRepeat) {
+        // ÚJ feladatok generálása
         let pool = this.selectedCase === 'Mixed' 
           ? [...this.allQuestions] 
           : this.allQuestions.filter(q => q.case === this.selectedCase);
@@ -281,6 +281,7 @@ allQuestions: [
         this.currentRoundBatch = shuffledPool.slice(0, this.totalQuestionsInRound);
       }
 
+      // Pakli betöltése és keverése
       this.filteredDeck = this.shuffle(this.currentRoundBatch);
       this.setNextQuestion();
     },
