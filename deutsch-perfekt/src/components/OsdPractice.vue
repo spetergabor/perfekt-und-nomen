@@ -32,7 +32,7 @@
             <div class="progress-bar"><div class="progress-fill" :style="{ width: progressPercentage + '%' }"></div></div>
           </div>
           <div class="text-card">
-            <span class="instruction">Olvasd el a szöveget és írd be a hiányzó szót! (max 3 betű)</span>
+            <span class="instruction">Olvasd el a szöveget és írd be a hiányzó szót!</span>
             <div class="cloze-text"><span v-html="formattedText"></span></div>
           </div>
           <div class="input-wrapper">
