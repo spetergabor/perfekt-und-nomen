@@ -167,22 +167,66 @@ input:focus {
   margin-bottom: 15px;
 }
 
-/* 4. LESEVERSTEHEN LAYOUT */
-.lese-layout { width: 100%; max-width: 1000px; animation: fadeIn 0.4s ease; margin-top: 20px; }
-.lese-wrapper { display: flex !important; gap: 30px !important; justify-content: center; align-items: flex-start; }
-
+/* --- LESEVERSTEHEN PANEL JAVÍTÁS --- */
 .lese-text-panel {
-  flex: 1.5; min-width: 350px; max-height: 600px; background: rgba(255, 255, 255, 0.08);
-  border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); overflow: hidden; display: flex; flex-direction: column;
+  width: 100% !important;
+  max-height: 500px; /* Fix magasság a görgetéshez */
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden; /* Ez kell, hogy a fejléc ne lógjon ki a lekerekítésből */
+  display: flex;
+  flex-direction: column;
 }
 
-.panel-header { background: rgba(52, 152, 219, 0.3); padding: 12px 20px; font-weight: bold; text-align: left; font-size: 0.8rem; text-transform: uppercase; }
-.scroll-text { padding: 25px; overflow-y: auto; text-align: left; line-height: 1.7; font-size: 0.95rem; color: white; }
+/* KÉK FEJLÉC VISSZAÁLLÍTÁSA */
+.panel-header {
+  background: rgba(52, 152, 219, 0.3); /* Világoskék áttetsző háttér */
+  padding: 12px 20px;
+  font-weight: bold;
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #3498db;
+}
 
-.lese-quiz-panel { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
-.lese-card { background: rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 20px; text-align: left; border: 1px solid rgba(255,255,255,0.1); }
-.lese-question { font-size: 1.1rem; margin-bottom: 20px; line-height: 1.4; color: white; }
+/* BELSŐ GÖRDÜLŐ SZÖVEG PADDING-GEL */
+.scroll-text {
+  padding: 30px; /* Megfelelő belső távolság */
+  overflow-y: auto !important; /* Függőleges görgetés engedélyezése */
+  text-align: left;
+  line-height: 1.7;
+  font-size: 1rem;
+  color: white;
+  flex: 1; /* Kitölti a maradék helyet a fejléc alatt */
+}
 
+/* GÖRGETŐSÁV ELEGÁNSABBÁ TÉTELE */
+.scroll-text::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-text::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+/* KVÍZ PANEL MARGIN FIX */
+.lese-quiz-panel {
+  margin-top: 10px;
+}
+
+/* MOBIL FINOMÍTÁS */
+@media (max-width: 600px) {
+  .lese-text-panel {
+    max-height: 400px;
+  }
+  .scroll-text {
+    padding: 20px;
+    font-size: 0.95rem;
+  }
+}
 /* 5. GOMBOK ÉS OPCIÓK */
 .opt-btn {
   width: 100%; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.2);
