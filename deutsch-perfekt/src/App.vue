@@ -25,6 +25,13 @@
           <p>Névelő + Melléknév ragozás</p>
           <button class="select-btn">Indítás</button>
         </div>
+
+        <div class="menu-card" @click="currentMode = 'osd'">
+          <div class="card-icon">🇦🇹</div>
+          <h2>ÖSD Gyakorló</h2>
+          <p>Vizsga-specifikus feladatok</p>
+          <button class="select-btn">Indítás</button>
+        </div>
       </div>
     </div>
 
@@ -36,6 +43,7 @@
       <VerbPractice v-if="currentMode === 'perfekt'" />
       <NomenVerbPractice v-if="currentMode === 'nomen-verb'" />
       <AdjektivPractice v-if="currentMode === 'adjektiv'" />
+      <OsdPractice v-if="currentMode === 'osd'" />
     </div>
   </div>
 </template>
@@ -44,6 +52,7 @@
 import VerbPractice from "./components/VerbPractice.vue";
 import NomenVerbPractice from "./components/NomenVerbPractice.vue";
 import AdjektivPractice from "./components/AdjektivPractice.vue";
+import OsdPractice from "./components/OsdPractice.vue"; // Új import
 
 export default {
   name: "App",
@@ -51,17 +60,18 @@ export default {
     VerbPractice,
     NomenVerbPractice,
     AdjektivPractice,
+    OsdPractice, // Regisztrálás
   },
   data() {
     return {
-      currentMode: null, // 'perfekt', 'nomen-verb', vagy 'adjektiv'
+      currentMode: null, // 'perfekt', 'nomen-verb', 'adjektiv' vagy 'osd'
     };
   },
 };
 </script>
 
 <style>
-/* ALAPSTÍLUSOK */
+/* ALAPSTÍLUSOK (Változatlanul hagytam a korábbi stílusaidat) */
 body, html {
   margin: 0;
   padding: 0;
@@ -83,7 +93,6 @@ body, html {
   box-sizing: border-box;
 }
 
-/* KONTEINER */
 .practice-container {
   display: flex;
   flex-direction: column;
@@ -93,7 +102,6 @@ body, html {
   position: relative;
 }
 
-/* VISSZA GOMB */
 .back-button {
   position: absolute;
   top: -50px;
@@ -115,7 +123,6 @@ body, html {
   opacity: 0.6;
 }
 
-/* MENÜ ELEMEI */
 h1 {
   color: #ffffff;
   margin-bottom: 10px;
@@ -134,6 +141,7 @@ h1 {
   gap: 20px;
   justify-content: center;
   flex-wrap: wrap;
+  max-width: 1000px; /* Hogy a 4 kártya szépen mutasson */
 }
 
 .menu-card {
