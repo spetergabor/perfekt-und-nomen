@@ -465,3 +465,213 @@ input:focus {
   font-size: 0.9rem;
   width: 100%;
 }
+
+/* --- LESEVERSTEHEN ALMENÜ (FÜLEK) JAVÍTÁS --- */
+.lese-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05); /* Sötét, üveghatású háttér a tartónak */
+  border-radius: 40px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lese-tabs .tab-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #bdc3c7 !important;
+  padding: 12px 35px !important;
+  border-radius: 30px !important;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: none !important;
+}
+
+.lese-tabs .tab-btn:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.lese-tabs .tab-btn.active {
+  background: #3498db !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* --- AUFGABE 2 ELRENDEZÉS --- */
+.lese-aufgabe2-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+}
+
+/* Címek panelje */
+.headings-panel {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.headings-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 20px;
+  font-size: 0.9rem;
+  color: #ecf0f1;
+}
+
+.heading-item strong {
+  color: #3498db;
+  margin-right: 5px;
+}
+
+/* Szövegek és Select kártyák */
+.texts-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.text-match-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.text-match-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.text-number {
+  font-weight: bold;
+  color: #3498db;
+  font-size: 1.1rem;
+}
+
+.a2-select {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c3e50;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.a2-select:disabled {
+  opacity: 0.9;
+  cursor: default;
+}
+
+.select-correct {
+  background: #2ecc71 !important;
+  color: white !important;
+}
+
+.select-wrong {
+  background: #e74c3c !important;
+  color: white !important;
+}
+
+.a2-correction {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.match-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #bdc3c7;
+}
+
+/* Mobil finomítások */
+@media (max-width: 768px) {
+  .headings-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- INPUT MEZŐK BRUTÁLIS FELÜLÍRÁSA --- */
+.input-wrapper-inline {
+  display: inline-block; /* Az inline-flex néha megnyújtja a dobozokat, ez biztonságosabb */
+  white-space: nowrap;
+}
+
+/* Szuper-specifikus szelektor, ami mindent üt */
+div.osd-practice div.luecken-full-text input.luecken-input[type="text"] {
+  -webkit-appearance: none !important; /* Apple/Safari formázás kilövése */
+  -moz-appearance: none !important;    /* Firefox formázás kilövése */
+  appearance: none !important;         /* Általános formázás kilövése */
+  
+  background-color: transparent !important;
+  background: none !important;
+  
+  border: none !important;
+  border-bottom: 2px solid #3498db !important; /* Kék vonal alul */
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  
+  width: 45px !important;
+  min-width: 45px !important;
+  max-width: 45px !important;
+  
+  height: 25px !important;
+  min-height: 25px !important;
+  max-height: 25px !important;
+  
+  padding: 0 !important;
+  margin: 0 4px !important;
+  
+  color: #f1c40f !important;
+  font-size: 1.15rem !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  outline: none !important;
+  line-height: 1 !important;
+}
+
+div.osd-practice div.luecken-full-text input.luecken-input[type="text"]:focus {
+  border-bottom-color: #f1c40f !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* --- LÜCKENTEXT HÁTTÉR ÉS KÁRTYA MEGERŐSÍTÉSE --- */
+.luecken-card {
+  background: rgba(255, 255, 255, 0.05) !important; /* Finom üveghatású fő kártya */
+  backdrop-filter: blur(10px) !important; /* Elhomályosítja a mögötte lévő dolgokat */
+  border-radius: 20px !important;
+  padding: 30px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  text-align: left;
+
+  margin-top: 15px !important;    /* Eltolja a kék "AUFGABE 3" fejléctől */
+  margin-bottom: 25px !important; /* Eltolja az "Ellenőrzés/Újra" gomboktól */
+}
+
+
+.luecken-paragraph {
+  font-size: 1.15rem;
+  line-height: 2.1;
+  color: #ecf0f1;
+  text-align: left; /* A sorkizárt helyett balra zárunk, hogy eltűnjenek a lyukak a szavak közül */
+}
