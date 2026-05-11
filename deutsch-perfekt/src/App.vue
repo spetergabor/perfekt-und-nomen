@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style>
-/* ALAPSTÍLUSOK (Változatlanul hagytam a korábbi stílusaidat) */
+/* 1. GLOBÁLIS ÉS ALAPSTÍLUSOK */
 body, html {
   margin: 0;
   padding: 0;
@@ -93,13 +93,92 @@ body, html {
   box-sizing: border-box;
 }
 
+/* 2. KONTÉNER ÉS CÍMSOROK */
 .practice-container {
   display: flex;
   flex-direction: column;
   align-items: center; 
   width: 100%;
-  max-width: 600px;
+  max-width: 800px; /* Megemelve, hogy elférjen a 2 oszlop */
   position: relative;
+}
+
+h1 {
+  color: #ffffff;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #bdc3c7;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* 3. A RÁCS (GRID) RENDSZER */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Fix 2 oszlop */
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px; 
+  justify-items: center;
+}
+
+/* 4. A KÁRTYÁK STÍLUSA */
+.menu-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  width: 100%;
+  max-width: 280px; 
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menu-card:hover {
+  transform: scale(1.05);
+}
+
+.card-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.menu-card h2 {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin: 10px 0;
+}
+
+.menu-card p {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+/* 5. GOMBOK ÉS INTERAKCIÓK */
+.select-btn {
+  margin-top: 15px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  transition: background 0.3s;
+}
+
+.select-btn:hover {
+  background-color: #27ae60;
 }
 
 .back-button {
@@ -123,72 +202,18 @@ body, html {
   opacity: 0.6;
 }
 
-h1 {
-  color: #ffffff;
-  margin-bottom: 10px;
-  text-align: center;
-  font-weight: 600;
-}
-
-.subtitle {
-  color: #bdc3c7;
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.menu-grid {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-  max-width: 1000px; /* Hogy a 4 kártya szépen mutasson */
-}
-
-.menu-card {
-  background: white;
-  border-radius: 20px;
-  padding: 30px;
-  width: 220px;
-  cursor: pointer;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  text-align: center;
-}
-
-.menu-card:hover {
-  transform: scale(1.05);
-}
-
-.card-icon {
-  font-size: 40px;
-  margin-bottom: 15px;
-}
-
-.menu-card h2 {
-  font-size: 1.2rem;
-  color: #2c3e50;
-  margin: 10px 0;
-}
-
-.menu-card p {
-  font-size: 0.9rem;
-  color: #7f8c8d;
-}
-
-.select-btn {
-  margin-top: 15px;
-  background-color: #2ecc71;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: bold;
-  width: 100%;
-  transition: background 0.3s;
-}
-
-.select-btn:hover {
-  background-color: #27ae60;
+/* 6. RESPONSIVE (MOBIL) NÉZET */
+@media (max-width: 650px) {
+  .menu-grid {
+    grid-template-columns: 1fr; /* Mobilon 1 oszlop */
+  }
+  
+  .practice-container {
+    max-width: 100%;
+  }
+  
+  .menu-card {
+    max-width: 320px; /* Mobilon lehet kicsit szélesebb a kártya */
+  }
 }
 </style>
