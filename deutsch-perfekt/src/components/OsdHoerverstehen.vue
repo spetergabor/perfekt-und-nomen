@@ -52,6 +52,19 @@
           <button v-if="!isA1Checked" @click="checkA1" class="btn-check">Ellenőrzés</button>
           <button v-if="isA1Checked" @click="resetA1" class="btn-next">Újra</button>
         </div>
+        <div v-if="(currentAufgabe === 1 && isA1Checked) || (currentAufgabe === 2 && isA2Checked)" class="result-display fade-in">
+  <div class="score-card">
+    <span class="score-label">Elért pontszám ebben a feladatban:</span>
+    <span class="score-value">{{ currentAufgabe === 1 ? scoreA1 : scoreA2 }} / 10</span>
+  </div>
+  
+  <div v-if="isA1Checked && isA2Checked" class="final-summary">
+    <h3>Összesített eredmény: {{ totalScore }} / 20</h3>
+    <p :class="totalScore >= 10 ? 'pass' : 'fail'">
+      {{ totalScore >= 10 ? 'Sikeres vizsga! 🎉' : 'Sajnos ez most nem érte el a 10 pontos ponthatárt. ❌' }} [cite: 195, 196]
+    </p>
+  </div>
+</div>
       </div>
     </div>
 
@@ -141,6 +154,19 @@
           <button v-if="!isA2Checked" @click="checkA2" class="btn-check">Ellenőrzés</button>
           <button v-if="isA2Checked" @click="resetA2" class="btn-next">Újra</button>
         </div>
+        <div v-if="(currentAufgabe === 1 && isA1Checked) || (currentAufgabe === 2 && isA2Checked)" class="result-display fade-in">
+  <div class="score-card">
+    <span class="score-label">Elért pontszám ebben a feladatban:</span>
+    <span class="score-value">{{ currentAufgabe === 1 ? scoreA1 : scoreA2 }} / 10</span>
+  </div>
+  
+  <div v-if="isA1Checked && isA2Checked" class="final-summary">
+    <h3>Összesített eredmény: {{ totalScore }} / 20</h3>
+    <p :class="totalScore >= 10 ? 'pass' : 'fail'">
+      {{ totalScore >= 10 ? 'Sikeres vizsga! 🎉' : 'Sajnos ez most nem érte el a 10 pontos ponthatárt. ❌' }} [cite: 195, 196]
+    </p>
+  </div>
+</div>
       </div>
     </div>
   </div>
@@ -171,6 +197,51 @@ export default {
       const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const fileName = this.currentAufgabe === 1 ? 'audio/ZB2_MS_A1_270917.mp3' : 'audio/ZB2_MS_A2_270917.mp3';
       return (isLocal ? '/' : '/perfekt-und-nomen/') + fileName + '?v=' + Date.now();
+    },
+
+    // AUFGABE 1 PONTSZÁMÍTÁS (PDF 3. oldal alapján)
+    scoreA1() {
+      let correctCount = 0;
+      this.aufgabe1.forEach(task => {
+        if (this.answersA1[task.id] === task.correct) {
+          correctCount++;
+        }
+      });
+      // Ponttáblázat [cite: 165]
+      const tableA1 = { 10: 10, 9: 8, 8: 9, 7: 7, 6: 6, 5: 4, 4: 5, 3: 3, 2: 2, 1: 1, 0: 0 };
+      return tableA1[correctCount] || 0;
+    },
+
+    // AUFGABE 2 PONTSZÁMÍTÁS (PDF 4. oldal alapján)
+    scoreA2() {
+      let messpunkte = 0;
+      
+      // Szöveges Messpunkte számítása (ahol egyezik, ott +1 pont) [cite: 189]
+      const fields = ['kosten', 'ermaessigung', 'dauer', 'max', 'bis'];
+      ['uni', 'zb', 'lit'].forEach(lib => {
+        fields.forEach(field => {
+          if (this.a2[lib][field].trim().toLowerCase() === this.correctAnswersA2[lib][field].toLowerCase()) {
+            messpunkte += 1; // Minden helyes bejegyzés 1 Messpunkt [cite: 189, 171]
+          }
+        });
+      });
+
+      // Messpunkte -> Ergebnispunkte átváltás (PDF 4. oldal táblázata alapján) [cite: 194]
+      if (messpunkte >= 43) return 10;
+      if (messpunkte >= 40) return 9;
+      if (messpunkte >= 37) return 8;
+      if (messpunkte >= 33) return 7;
+      if (messpunkte >= 29) return 6;
+      if (messpunkte >= 24) return 5;
+      if (messpunkte >= 19) return 4;
+      if (messpunkte >= 14) return 3;
+      if (messpunkte >= 9) return 2;
+      if (messpunkte >= 4) return 1;
+      return 0;
+    },
+
+    totalScore() {
+      return this.scoreA1 + this.scoreA2; // Összesen max 20 pont [cite: 195]
     }
   },
   methods: {
@@ -234,4 +305,28 @@ export default {
 .tf-btn.correct { background: #2ecc71 !important; }
 .tf-btn.wrong { background: #e74c3c !important; }
 .correction-badge { color: #e74c3c; font-weight: bold; margin-left: 10px; }
+.result-display {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 15px;
+  border: 1px solid #3498db;
+  text-align: center;
+}
+
+.score-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #3498db;
+  margin-left: 10px;
+}
+
+.final-summary {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px dashed rgba(255,255,255,0.2);
+}
+
+.pass { color: #2ecc71; font-weight: bold; font-size: 1.2rem; }
+.fail { color: #e74c3c; font-weight: bold; font-size: 1.2rem; }
 </style>
