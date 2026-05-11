@@ -214,11 +214,11 @@ export default {
   },
 computed: {
     audioSource() {
-      // Relatív útvonal (NINCS perjel az elején!)
-      // Így tökéletesen működik lokálisan és a GitHub Pages-en is.
-      return this.currentAufgabe === 1
-        ? 'audio/ZB2_MS_A1_270917.mp3'
-        : 'audio/ZB2_MS_A2_270917.mp3';
+      // Ezek a "raw" (nyers) linkek, amiket a böngésző közvetlenül le tud játszani
+      const audio1 = 'https://raw.githubusercontent.com/spetergabor/perfekt-und-nomen/main/deutsch-perfekt/public/audio/ZB2_MS_A1_270917.mp3';
+      const audio2 = 'https://raw.githubusercontent.com/spetergabor/perfekt-und-nomen/main/deutsch-perfekt/public/audio/ZB2_MS_A2_270917.mp3';
+      
+      return this.currentAufgabe === 1 ? audio1 : audio2;
     }
   },
   methods: {
