@@ -114,17 +114,18 @@ computed: {
     audioSource() {
       const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       
-      // A fájlok nevei
       const fileName = this.currentAufgabe === 1 
         ? 'audio/ZB2_MS_A1_270917.mp3' 
         : 'audio/ZB2_MS_A2_270917.mp3';
 
+      // Hozzáadunk egy véletlenszerű számot (timestamp), hogy ne a cache-ből töltse be
+      const version = '?v=' + Date.now();
+
       if (isLocal) {
-        // Lokálisan a Vite/Webpack a /audio/... útvonalon látja a public tartalmát
-        return '/' + fileName;
+        return '/' + fileName + version;
       } else {
-        // GitHubon a projekt neve után rögtön jön az audio mappa (nincs public!)
-        return '/perfekt-und-nomen/' + fileName;
+        // Pontosan az az útvonal, ami a böngészőben manuálisan működött
+        return '/perfekt-und-nomen/' + fileName + version;
       }
     }
   },
