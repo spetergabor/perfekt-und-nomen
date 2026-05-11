@@ -212,19 +212,13 @@ export default {
       }
     };
   },
-  computed: {
+computed: {
     audioSource() {
-      // 100% bombabiztos megoldás, ami nem használ semmilyen Webpack/Vite környezeti változót:
-      // Megnézzük a böngészőtől, hogy hol vagyunk.
-      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      
-      // Ha a gépeden fut a fejlesztői szerver, a gyökeret használjuk (/).
-      // Ha a GitHubon, betesszük a repository nevét (/perfekt-und-nomen/).
-      const basePath = isLocal ? '/' : '/perfekt-und-nomen/';
-
+      // Relatív útvonal (NINCS perjel az elején!)
+      // Így tökéletesen működik lokálisan és a GitHub Pages-en is.
       return this.currentAufgabe === 1
-        ? basePath + 'audio/ZB2_MS_A1_270917.mp3'
-        : basePath + 'audio/ZB2_MS_A2_270917.mp3';
+        ? 'audio/ZB2_MS_A1_270917.mp3'
+        : 'audio/ZB2_MS_A2_270917.mp3';
     }
   },
   methods: {
