@@ -4,8 +4,7 @@
     <div class="audio-panel">
       <div class="panel-header">Audio Player - Aufgabe {{ currentAufgabe }}</div>
       <div class="audio-container">
-        <audio controls class="custom-audio" preload="metadata" :key="currentAufgabe">
-          <source :src="currentAufgabe === 1 ? '/audio/ZB2_MS_A1_270917.mp3' : '/audio/ZB2_MS_A2_270917.mp3'" type="audio/mpeg">
+        <audio controls class="custom-audio" preload="metadata" :key="currentAufgabe" :src="audioSource">
           A böngésződ nem támogatja az audio elemet.
         </audio>
         <p class="audio-info" v-if="currentAufgabe === 1">
@@ -205,7 +204,6 @@ export default {
       answersA1: {},
       isA1Checked: false,
       
-      // Aufgabe 2 adatstruktúrája
       isA2Checked: false,
       a2: {
         uni: this.getEmptyCol(),
@@ -213,6 +211,21 @@ export default {
         lit: this.getEmptyCol()
       }
     };
+  },
+  computed: {
+    audioSource() {
+      // 100% bombabiztos megoldás, ami nem használ semmilyen Webpack/Vite környezeti változót:
+      // Megnézzük a böngészőtől, hogy hol vagyunk.
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      
+      // Ha a gépeden fut a fejlesztői szerver, a gyökeret használjuk (/).
+      // Ha a GitHubon, betesszük a repository nevét (/perfekt-und-nomen/).
+      const basePath = isLocal ? '/' : '/perfekt-und-nomen/';
+
+      return this.currentAufgabe === 1
+        ? basePath + 'audio/ZB2_MS_A1_270917.mp3'
+        : basePath + 'audio/ZB2_MS_A2_270917.mp3';
+    }
   },
   methods: {
     setA1(id, value) {
@@ -237,8 +250,6 @@ export default {
     },
     checkA2() {
       this.isA2Checked = true;
-      // Itt lehetne automatikus javító algoritmust futtatni, 
-      // de egyelőre a PDF formátumhoz vizuális kiértékelést is adhatsz később.
     },
     resetA2() {
       this.a2 = { uni: this.getEmptyCol(), zb: this.getEmptyCol(), lit: this.getEmptyCol() };
@@ -249,238 +260,39 @@ export default {
 </script>
 
 <style scoped>
-/* --- ALAPOK ÉS FÜLEK --- */
-.hoeren-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.hoeren-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 40px;
-  width: fit-content;
-  margin: 0 auto;
-}
-
-.tab-btn {
-  background: transparent;
-  border: none;
-  color: #bdc3c7;
-  padding: 12px 35px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.tab-btn.active {
-  background: #3498db;
-  color: white;
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
-}
-
-/* --- PANELS (Audio és Feladatok) --- */
-.audio-panel, .task-panel {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.panel-header {
-  background: rgba(52, 152, 219, 0.2);
-  padding: 12px 20px;
-  font-weight: bold;
-  color: #3498db;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: left;
-}
-
-.audio-container {
-  padding: 20px;
-  text-align: center;
-}
-
-.custom-audio {
-  width: 100%;
-  height: 45px;
-  border-radius: 25px;
-  outline: none;
-}
-
-.audio-info {
-  margin-top: 15px;
-  font-size: 0.9rem;
-  color: #bdc3c7;
-}
-
-.content-box {
-  padding: 25px;
-}
-
-.instruction {
-  color: #f1c40f;
-  background: rgba(241, 196, 15, 0.1);
-  padding: 15px;
-  border-left: 4px solid #f1c40f;
-  margin-bottom: 25px;
-  text-align: left;
-}
-
-/* --- AUFGABE 1 (Igaz-Hamis) --- */
-.tf-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.tf-item {
-  display: flex;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px inset rgba(255, 255, 255, 0.05);
-}
-
-.tf-num {
-  font-weight: bold;
-  color: #3498db;
-  width: 30px;
-  font-size: 1.1rem;
-}
-
-.tf-text {
-  flex: 1;
-  text-align: left;
-  color: #ecf0f1;
-  padding-right: 20px;
-  line-height: 1.4;
-}
-
-.tf-btns {
-  display: flex;
-  gap: 8px;
-}
-
-.tf-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.tf-btn.active {
-  background: #3498db;
-  border-color: #3498db;
-}
-
+.hoeren-layout { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 900px; margin: 0 auto; }
+.hoeren-tabs { display: flex; justify-content: center; gap: 10px; padding: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 40px; width: fit-content; margin: 0 auto; }
+.tab-btn { background: transparent; border: none; color: #bdc3c7; padding: 12px 35px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; }
+.tab-btn.active { background: #3498db; color: white; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); }
+.audio-panel, .task-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+.panel-header { background: rgba(52, 152, 219, 0.2); padding: 12px 20px; font-weight: bold; color: #3498db; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.1); text-align: left; }
+.audio-container { padding: 20px; text-align: center; }
+.custom-audio { width: 100%; height: 45px; border-radius: 25px; outline: none; }
+.audio-info { margin-top: 15px; font-size: 0.9rem; color: #bdc3c7; }
+.content-box { padding: 25px; }
+.instruction { color: #f1c40f; background: rgba(241, 196, 15, 0.1); padding: 15px; border-left: 4px solid #f1c40f; margin-bottom: 25px; text-align: left; }
+.tf-list { display: flex; flex-direction: column; gap: 15px; }
+.tf-item { display: flex; align-items: center; background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 12px; border: 1px inset rgba(255, 255, 255, 0.05); }
+.tf-num { font-weight: bold; color: #3498db; width: 30px; font-size: 1.1rem; }
+.tf-text { flex: 1; text-align: left; color: #ecf0f1; padding-right: 20px; line-height: 1.4; }
+.tf-btns { display: flex; gap: 8px; }
+.tf-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; width: 40px; height: 40px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; }
+.tf-btn.active { background: #3498db; border-color: #3498db; }
 .tf-btn.correct { background: #2ecc71 !important; border-color: #2ecc71 !important; }
 .tf-btn.wrong { background: #e74c3c !important; border-color: #e74c3c !important; }
-
-.correction-badge {
-  margin-left: 15px;
-  color: #e74c3c;
-  font-weight: bold;
-}
-
-/* --- AUFGABE 2 (Táblázat) --- */
-.table-scroll-wrapper {
-  overflow-x: auto;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.hv-table {
-  width: 100%;
-  min-width: 800px;
-  border-collapse: collapse;
-  text-align: left;
-  color: #ecf0f1;
-}
-
-.hv-table th, .hv-table td {
-  padding: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.hv-table th {
-  background: rgba(52, 152, 219, 0.2);
-  color: #3498db;
-  font-weight: bold;
-}
-
-.hv-table td {
-  vertical-align: top;
-  font-size: 0.95rem;
-}
-
-.hv-table label {
-  cursor: pointer;
-  display: inline-block;
-  margin-bottom: 5px;
-}
-
-.hv-table input[type="checkbox"] {
-  accent-color: #3498db;
-  transform: scale(1.2);
-  margin-right: 8px;
-}
-
-.sm-input {
-  width: 50px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.sm-input.time {
-  width: 60px;
-}
-
-.sm-input:focus {
-  outline: none;
-  border-color: #f1c40f;
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* --- GOMBOK --- */
-.button-group {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.btn-check, .btn-next {
-  background: #3498db;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 30px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-
+.correction-badge { margin-left: 15px; color: #e74c3c; font-weight: bold; }
+.table-scroll-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
+.hv-table { width: 100%; min-width: 800px; border-collapse: collapse; text-align: left; color: #ecf0f1; }
+.hv-table th, .hv-table td { padding: 15px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+.hv-table th { background: rgba(52, 152, 219, 0.2); color: #3498db; font-weight: bold; }
+.hv-table td { vertical-align: top; font-size: 0.95rem; }
+.hv-table label { cursor: pointer; display: inline-block; margin-bottom: 5px; }
+.hv-table input[type="checkbox"] { accent-color: #3498db; transform: scale(1.2); margin-right: 8px; }
+.sm-input { width: 50px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: white; padding: 5px; border-radius: 5px; text-align: center; }
+.sm-input.time { width: 60px; }
+.sm-input:focus { outline: none; border-color: #f1c40f; background: rgba(255, 255, 255, 0.2); }
+.button-group { display: flex; justify-content: flex-end; }
+.btn-check, .btn-next { background: #3498db; color: white; border: none; padding: 12px 30px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
 .fade-in { animation: fadeIn 0.4s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 </style>
