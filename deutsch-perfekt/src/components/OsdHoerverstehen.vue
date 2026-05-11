@@ -56,38 +56,139 @@
     </div>
 
     <div v-if="currentAufgabe === 2" class="task-panel fade-in">
-      <div class="panel-header">Aufgabe 2 (Lückentext / Tabelle)</div>
-      <div class="content-box">
-        <p class="instruction">Situation: Sie hören ein Gespräch. Ergänzen Sie die fehlenden Informationen.</p>
-        <div class="table-scroll-wrapper">
-          <table class="hv-table">
-            <thead>
-              <tr>
-                <th>Bibliotheken</th>
-                <th>Universitätsbibliothek</th>
-                <th>ZB (Zentralbib.)</th>
-                <th>Literaturarchiv</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Kosten Jahresausweis</td>
-                <td><input type="text" class="sm-input" v-model="a2.uni.kosten"> Franken</td>
-                <td><input type="text" class="sm-input" v-model="a2.zb.kosten"> Franken</td>
-                <td><input type="text" class="sm-input" v-model="a2.lit.kosten"> Franken</td>
-              </tr>
-              <tr>
-                <td>Ausleihdauer</td>
-                <td><input type="text" class="sm-input" v-model="a2.uni.dauer"> Wochen</td>
-                <td><input type="text" class="sm-input" v-model="a2.zb.dauer"> Wochen</td>
-                <td><input type="text" class="sm-input" v-model="a2.lit.dauer"> Wochen</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p style="margin-top:15px; color:#bdc3c7; font-style:italic;">(A táblázat többi része is szerkeszthető, de a lényeg most az audio tesztelése.)</p>
-      </div>
+  <div class="panel-header">Aufgabe 2 (Lückentext / Tabelle)</div>
+  <div class="content-box">
+    <p class="instruction">Situation: Sie hören ein Gespräch zwischen zwei Personen. Ergänzen Sie die Informationen[cite: 61, 62].</p>
+    
+    <div class="table-scroll-wrapper">
+      <table class="hv-table">
+        <thead>
+          <tr>
+            <th>Bibliotheken [cite: 64]</th>
+            <th>Universitätsbibliothek [cite: 65]</th>
+            <th>ZB (Zentralbib.) [cite: 68]</th>
+            <th>Literaturarchiv [cite: 66]</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Schwerpunkt</td>
+            <td>
+              <label><input type="checkbox" v-model="a2.uni.schwerpunkt_allg" :disabled="isA2Checked"> allgemein</label><br>
+              <label><input type="checkbox" v-model="a2.uni.schwerpunkt_fach" :disabled="isA2Checked"> Fachliteratur</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.zb.schwerpunkt_allg" :disabled="isA2Checked"> allgemein</label><br>
+              <label><input type="checkbox" v-model="a2.zb.schwerpunkt_fach" :disabled="isA2Checked"> Fachliteratur</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.lit.schwerpunkt_allg" :disabled="isA2Checked"> allgemein</label><br>
+              <label><input type="checkbox" v-model="a2.lit.schwerpunkt_fach" :disabled="isA2Checked"> Fachliteratur</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Kosten Jahresausweis</td>
+            <td><input type="text" class="sm-input" v-model="a2.uni.kosten" :disabled="isA2Checked"> Franken</td>
+            <td><input type="text" class="sm-input" v-model="a2.zb.kosten" :disabled="isA2Checked"> Franken</td>
+            <td><input type="text" class="sm-input" v-model="a2.lit.kosten" :disabled="isA2Checked"> Franken</td>
+          </tr>
+          <tr>
+            <td>Ermäßigung Studierende</td>
+            <td><input type="text" class="sm-input" v-model="a2.uni.ermaessigung" :disabled="isA2Checked"> %</td>
+            <td>ca. <input type="text" class="sm-input" v-model="a2.zb.ermaessigung" :disabled="isA2Checked"> %</td>
+            <td>ca. <input type="text" class="sm-input" v-model="a2.lit.ermaessigung" :disabled="isA2Checked"> %</td>
+          </tr>
+          <tr>
+            <td>Ausleihdauer</td>
+            <td><input type="text" class="sm-input" v-model="a2.uni.dauer" :disabled="isA2Checked"> Wochen</td>
+            <td><input type="text" class="sm-input" v-model="a2.zb.dauer" :disabled="isA2Checked"> Wochen</td>
+            <td><input type="text" class="sm-input" v-model="a2.lit.dauer" :disabled="isA2Checked"> Wochen</td>
+          </tr>
+          <tr>
+            <td>Buchausleihe (außer vor Ort)</td>
+            <td>
+              <label><input type="checkbox" v-model="a2.uni.ausleihe_post" :disabled="isA2Checked"> Postversand</label><br>
+              <label><input type="checkbox" v-model="a2.uni.ausleihe_fern" :disabled="isA2Checked"> Fernleihe</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.zb.ausleihe_post" :disabled="isA2Checked"> Postversand</label><br>
+              <label><input type="checkbox" v-model="a2.zb.ausleihe_fern" :disabled="isA2Checked"> Fernleihe</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.lit.ausleihe_post" :disabled="isA2Checked"> Postversand</label><br>
+              <label><input type="checkbox" v-model="a2.lit.ausleihe_fern" :disabled="isA2Checked"> Fernleihe</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Bei Anmeldung nötig</td>
+            <td>
+              <label><input type="checkbox" v-model="a2.uni.anmeldung_amt" :disabled="isA2Checked"> amtlicher Ausweis</label><br>
+              <label><input type="checkbox" v-model="a2.uni.anmeldung_adr" :disabled="isA2Checked"> Adressnachweis</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.zb.anmeldung_amt" :disabled="isA2Checked"> amtlicher Ausweis</label><br>
+              <label><input type="checkbox" v-model="a2.zb.anmeldung_adr" :disabled="isA2Checked"> Adressnachweis</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.lit.anmeldung_amt" :disabled="isA2Checked"> amtlicher Ausweis</label><br>
+              <label><input type="checkbox" v-model="a2.lit.anmeldung_adr" :disabled="isA2Checked"> Adressnachweis</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Serviceleistungen</td>
+            <td>
+              <label><input type="checkbox" v-model="a2.uni.service_les" :disabled="isA2Checked"> Lesungen</label><br>
+              <label><input type="checkbox" v-model="a2.uni.service_caf" :disabled="isA2Checked"> Cafeteria</label><br>
+              <label><input type="checkbox" v-model="a2.uni.service_lou" :disabled="isA2Checked"> Leselounge</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.zb.service_les" :disabled="isA2Checked"> Lesungen</label><br>
+              <label><input type="checkbox" v-model="a2.zb.service_caf" :disabled="isA2Checked"> Cafeteria</label><br>
+              <label><input type="checkbox" v-model="a2.zb.service_lou" :disabled="isA2Checked"> Leselounge</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.lit.service_les" :disabled="isA2Checked"> Lesungen</label><br>
+              <label><input type="checkbox" v-model="a2.lit.service_caf" :disabled="isA2Checked"> Cafeteria</label><br>
+              <label><input type="checkbox" v-model="a2.lit.service_lou" :disabled="isA2Checked"> Leselounge</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Zusätzliches Angebot</td>
+            <td>
+              <label><input type="checkbox" v-model="a2.uni.extra_wlan" :disabled="isA2Checked"> WLAN</label><br>
+              <label><input type="checkbox" v-model="a2.uni.extra_fuehr" :disabled="isA2Checked"> Führungen</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.zb.extra_wlan" :disabled="isA2Checked"> WLAN</label><br>
+              <label><input type="checkbox" v-model="a2.zb.extra_fuehr" :disabled="isA2Checked"> Führungen</label>
+            </td>
+            <td>
+              <label><input type="checkbox" v-model="a2.lit.extra_wlan" :disabled="isA2Checked"> WLAN</label><br>
+              <label><input type="checkbox" v-model="a2.lit.extra_fuehr" :disabled="isA2Checked"> Führungen</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Maximale Ausleihe</td>
+            <td><input type="text" class="sm-input" v-model="a2.uni.max" :disabled="isA2Checked"> Bücher</td>
+            <td><input type="text" class="sm-input" v-model="a2.zb.max" :disabled="isA2Checked"> Bücher</td>
+            <td><input type="text" class="sm-input" v-model="a2.lit.max" :disabled="isA2Checked"> Bücher</td>
+          </tr>
+          <tr>
+            <td>Öffnungszeiten</td>
+            <td>von <input type="text" class="sm-input time" v-model="a2.uni.von" :disabled="isA2Checked"> bis <input type="text" class="sm-input time" v-model="a2.uni.bis" :disabled="isA2Checked"> Uhr</td>
+            <td>von <input type="text" class="sm-input time" v-model="a2.zb.von" :disabled="isA2Checked"> bis <input type="text" class="sm-input time" v-model="a2.zb.bis" :disabled="isA2Checked"> Uhr</td>
+            <td>von <input type="text" class="sm-input time" v-model="a2.lit.von" :disabled="isA2Checked"> bis <input type="text" class="sm-input time" v-model="a2.lit.bis" :disabled="isA2Checked"> Uhr</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+    <div class="button-group" style="margin-top:20px;">
+      <button v-if="!isA2Checked" @click="checkA2" class="btn-check">Ellenőrzés</button>
+      <button v-if="isA2Checked" @click="resetA2" class="btn-next">Újra</button>
+    </div>
+  </div>
+</div>
   </div>
 </template>
 
@@ -104,32 +205,39 @@ export default {
       isA1Checked: false,
       isA2Checked: false,
       a2: {
-        uni: { kosten: "", dauer: "" },
-        zb: { kosten: "", dauer: "" },
-        lit: { kosten: "", dauer: "" }
+        uni: this.getEmptyCol(),
+        zb: this.getEmptyCol(),
+        lit: this.getEmptyCol()
       }
     };
   },
-computed: {
+  computed: {
     audioSource() {
       const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      
       const fileName = this.currentAufgabe === 1 
         ? 'audio/ZB2_MS_A1_270917.mp3' 
         : 'audio/ZB2_MS_A2_270917.mp3';
-
-      // Hozzáadunk egy véletlenszerű számot (timestamp), hogy ne a cache-ből töltse be
       const version = '?v=' + Date.now();
 
       if (isLocal) {
         return '/' + fileName + version;
       } else {
-        // Pontosan az az útvonal, ami a böngészőben manuálisan működött
         return '/perfekt-und-nomen/' + fileName + version;
       }
     }
   },
-  methods: {
+methods: {
+  getEmptyCol() {
+    return {
+      schwerpunkt_allg: false, schwerpunkt_fach: false,
+      kosten: "", ermaessigung: "", dauer: "",
+      ausleihe_post: false, ausleihe_fern: false,
+      anmeldung_amt: false, anmeldung_adr: false,
+      service_les: false, service_caf: false, service_lou: false,
+      extra_wlan: false, extra_fuehr: false,
+      max: "", von: "", bis: ""
+    };
+  },
     setA1(id, value) {
       if (!this.isA1Checked) {
         this.answersA1[id] = value;
@@ -139,13 +247,21 @@ computed: {
     resetA1() {
       this.answersA1 = {};
       this.isA1Checked = false;
+    },
+    checkA2() { this.isA2Checked = true; },
+    resetA2() {
+      this.a2 = {
+        uni: this.getEmptyCol(),
+        zb: this.getEmptyCol(),
+        lit: this.getEmptyCol()
+      };
+      this.isA2Checked = false;
     }
   }
 };
 </script>
 
 <style scoped>
-/* Meglévő stílusaid maradnak */
 .hoeren-layout { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 900px; margin: 0 auto; }
 .hoeren-tabs { display: flex; justify-content: center; gap: 10px; padding: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 40px; width: fit-content; margin: 0 auto; }
 .tab-btn { background: transparent; border: none; color: #bdc3c7; padding: 12px 35px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; }
@@ -175,4 +291,4 @@ computed: {
 .btn-check, .btn-next { background: #3498db; color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; }
 .fade-in { animation: fadeIn 0.4s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-</style>
+</style> 
