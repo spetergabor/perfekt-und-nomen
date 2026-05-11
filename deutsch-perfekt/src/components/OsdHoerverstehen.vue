@@ -110,11 +110,22 @@ export default {
       }
     };
   },
-  computed: {
+computed: {
     audioSource() {
-      const audio1 = 'https://raw.githubusercontent.com/spetergabor/perfekt-und-nomen/main/deutsch-perfekt/public/audio/ZB2_MS_A1_270917.mp3';
-      const audio2 = 'https://raw.githubusercontent.com/spetergabor/perfekt-und-nomen/main/deutsch-perfekt/public/audio/ZB2_MS_A2_270917.mp3';
-      return this.currentAufgabe === 1 ? audio1 : audio2;
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      
+      // A fájlok nevei
+      const fileName = this.currentAufgabe === 1 
+        ? 'audio/ZB2_MS_A1_270917.mp3' 
+        : 'audio/ZB2_MS_A2_270917.mp3';
+
+      if (isLocal) {
+        // Lokálisan a Vite/Webpack a /audio/... útvonalon látja a public tartalmát
+        return '/' + fileName;
+      } else {
+        // GitHubon a projekt neve után rögtön jön az audio mappa (nincs public!)
+        return '/perfekt-und-nomen/' + fileName;
+      }
     }
   },
   methods: {
