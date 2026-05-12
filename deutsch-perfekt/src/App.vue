@@ -68,17 +68,33 @@ export default {
     };
   },
   // --- INNENTŐL MÁSOLD ---
-  mounted() {
+mounted() {
+    // Kezdő magasság küldése
     this.sendHeight();
-    // Figyeli, ha bármi változik az app méretében (pl. lenyílik egy menü)
-    const observer = new ResizeObserver(() => this.sendHeight());
-    observer.observe(document.body);
+    
+    // ResizeObserver finomítása
+    const observer = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        // Csak a tartalom tényleges magasságát nézzük
+        const height = Math.ceil(entry.contentRect.height);
+        this.sendHeight(height);
+      }
+    });
+    
+    // Az #app div-et figyeljük, ne a body-t!
+    const appElement = document.getElementById('app');
+    if (appElement) {
+      observer.observe(appElement);
+    }
   },
   methods: {
-    sendHeight() {
-      // "Kikiabál" az iframe-ből a szülő oldalnak (WordPress)
+    sendHeight(explicitHeight) {
+      // Ha kaptunk pontos magasságot az Observertől, azt használjuk, 
+      // egyébként mérünk egyet (de az offsetHeight stabilabb)
+      const height = explicitHeight || document.getElementById('app').offsetHeight;
+      
       window.parent.postMessage({
-        frameHeight: document.body.scrollHeight
+        frameHeight: height
       }, '*');
     }
   }
