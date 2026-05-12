@@ -183,7 +183,7 @@ h1 {
 
 .back-button {
   position: absolute;
-  top: -50px;
+  top: 0px;
   left: 0;
   background: none;
   border: none;

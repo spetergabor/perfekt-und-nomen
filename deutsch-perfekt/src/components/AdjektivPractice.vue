@@ -326,113 +326,109 @@ export default {
 </script>
 
 <style scoped>
-/* A stílusok maradnak az általad küldöttek */
-.adjektiv-practice { width: 100%; max-width: 600px; padding: 40px 25px; text-align: center; box-sizing: border-box; }
+/* ALAP BEÁLLÍTÁSOK */
+.adjektiv-practice { width: 100%; max-width: 600px; padding: 40px 25px; text-align: center; box-sizing: border-box; margin: 0 auto; }
 h1 { color: #ffffff; font-size: 1.8rem; margin-bottom: 25px; }
 .case-selector { animation: fadeIn 0.5s ease; }
 .subtitle { color: #bdc3c7; margin-bottom: 30px; }
+
+/* RÁCSOK ÉS ÁLLAPOTJELZŐ (400px szélesek) */
 .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 400px; margin: 0 auto; }
-.btn-case { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 15px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.2s ease; }
+.btn-case { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 15px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.2s ease; margin: 0; /* Felülírja az általános gomb margót */ }
 .btn-case:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
 .btn-mixed { grid-column: span 2; background: #3498db; border: none; }
 .case-indicator { color: #3498db; margin-bottom: 10px; text-transform: uppercase; font-size: 0.8rem; font-weight: bold; }
+
 .progress-container { max-width: 400px; margin: 0 auto 30px auto; }
 .progress-bar { width: 100%; height: 8px; background: rgba(224, 230, 237, 0.2); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
 .progress-fill { height: 100%; background: #2ecc71; transition: width 0.3s ease; }
 .progress-text { font-size: 0.9rem; color: #ffffff; margin: 0; }
-.question-card { padding: 10px; margin-bottom: 25px; }
+
+/* KÁRTYA ÉS TARTALMA (Itt történt a fő javítás: max-width 400px és középre igazítás) */
+.question-card { 
+  max-width: 400px; 
+  margin: 0 auto 25px auto; 
+  padding: 10px; 
+  position: relative; /* Fontos az input ikon pozicionálásához */
+}
 .adjektiv-display { font-size: 2.2rem; color: #ffffff; margin: 0; font-weight: bold; }
 .meaning { font-style: italic; color: #bdc3c7; margin-bottom: 10px; font-size: 1.2rem; }
-input { width: 100%; padding: 15px 20px; border-radius: 50px; border: 2px solid rgba(223, 230, 233, 0.3); background: white; font-size: 18px; outline: none; transition: all 0.2s ease; box-sizing: border-box; margin-bottom: 15px; }
+
+/* INPUT MEZŐK (400px-hez igazítva) */
+input { 
+  width: 100%; 
+  max-width: 400px; 
+  display: block; 
+  margin: 0 auto 15px auto; 
+  padding: 15px 20px; 
+  border-radius: 50px; 
+  border: 2px solid rgba(223, 230, 233, 0.3); 
+  background: white; 
+  font-size: 18px; 
+  outline: none; 
+  transition: all 0.2s ease; 
+  box-sizing: border-box; 
+}
 input:focus { border-color: #3498db; }
 .input-correct { border-color: #2ecc71 !important; background-color: #eafaf1; }
 .input-wrong { border-color: #e74c3c !important; background-color: #fdf2f2; }
+
+/* INPUT IKONOK */
 .input-icon { position: absolute; right: 20px; top: 25px; font-size: 20px; font-weight: bold; }
 .correct-icon { color: #2ecc71; }
 .wrong-icon { color: #e74c3c; }
-button { width: 100%; padding: 15px 35px; border-radius: 50px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s ease; color: white; margin-bottom: 10px; }
+
+/* GOMBOK (400px-hez igazítva) */
+button { 
+  width: 100%; 
+  max-width: 400px; 
+  display: block; 
+  margin: 0 auto 10px auto; 
+  padding: 15px 35px; 
+  border-radius: 50px; 
+  border: none; 
+  font-size: 16px; 
+  font-weight: bold; 
+  cursor: pointer; 
+  transition: background 0.2s ease; 
+  color: white; 
+}
 .btn-check { background: #2ecc71; }
 .btn-next { background: #3498db; }
+
+/* FEEDBACK (Visszajelzés) */
 .feedback-box { max-width: 400px; margin: 25px auto 0 auto; padding: 20px; border-radius: 15px; backdrop-filter: blur(5px); }
 .fb-correct { background-color: rgba(46, 204, 113, 0.2); border: 1px solid #2ecc71; color: #ffffff; }
 .fb-wrong { background-color: rgba(255, 255, 255, 0.1); border: 2px solid #e74c3c; color: #ffffff; }
 .wrong-highlight { background: #e74c3c; color: white; padding: 10px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; font-size: 1.1rem; }
 .wrong-highlight span { text-decoration: underline; font-size: 1.2rem; }
 .rule-details { text-align: left; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
+
+/* ANIMÁCIÓK */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+
+/* INFO GOMB ÉS POPUP / MODAL (Ezek szélessége egyedi marad) */
+.info-btn {
+  position: absolute; top: 10px; right: 10px;
+  width: auto; margin: 0; padding: 8px 15px;
+  background: rgba(52, 152, 219, 0.3); border: 1px solid #3498db;
+  font-size: 0.9rem; border-radius: 10px;
+}
 .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .popup-content { background: white; padding: 40px; border-radius: 20px; width: 400px; text-align: center; color: #2c3e50; }
 .btn-popup-action { background: #2c3e50; margin-top: 20px; }
 .secondary { background: #7f8c8d !important; margin-top: 10px !important; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-/* INFO GOMB */
-.info-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: auto;
-  padding: 8px 15px;
-  background: rgba(52, 152, 219, 0.3);
-  border: 1px solid #3498db;
-  font-size: 0.9rem;
-  border-radius: 10px;
-}
 
-/* MODAL STÍLUSOK */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  padding: 20px;
-}
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 2000; padding: 0px; }
+.modal-content { background: white; color: #2c3e50; padding: 30px; border-radius: 20px; max-width: 300px; width: 100%; max-height: 85vh; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.close-modal { position: absolute; top: 10px; right: 15px; font-size: 30px; background: none; border: none; color: #2c3e50; cursor: pointer; width: auto; padding: 0; margin: 0; }
 
-.modal-content {
-  background: white;
-  color: #2c3e50;
-  padding: 30px;
-  border-radius: 20px;
-  max-width: 600px;
-  width: 100%;
-  max-height: 85vh;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.close-modal {
-  position: absolute;
-  top: 10px; right: 15px;
-  font-size: 30px;
-  background: none; border: none;
-  color: #2c3e50; cursor: pointer;
-  width: auto; padding: 0;
-}
-
-.table-scroll {
-  overflow-y: auto;
-  margin-top: 10px;
-}
-
+/* TÁBLÁZAT A MODALBAN */
+.table-scroll { overflow-y: auto; margin-top: 10px; }
 h3 { margin: 20px 0 10px 0; color: #3498db; font-size: 1.1rem; }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  font-size: 0.85rem;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
-
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.85rem; }
+th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
 th { background-color: #f8f9fa; font-weight: bold; }
 </style>
