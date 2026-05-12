@@ -67,38 +67,7 @@ export default {
       currentMode: null, // 'perfekt', 'nomen-verb', 'adjektiv' vagy 'osd'
     };
   },
-  // --- INNENTŐL MÁSOLD ---
-mounted() {
-    // Kezdő magasság küldése
-    this.sendHeight();
-    
-    // ResizeObserver finomítása
-    const observer = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        // Csak a tartalom tényleges magasságát nézzük
-        const height = Math.ceil(entry.contentRect.height);
-        this.sendHeight(height);
-      }
-    });
-    
-    // Az #app div-et figyeljük, ne a body-t!
-    const appElement = document.getElementById('app');
-    if (appElement) {
-      observer.observe(appElement);
-    }
-  },
-  methods: {
-    sendHeight(explicitHeight) {
-      // Ha kaptunk pontos magasságot az Observertől, azt használjuk, 
-      // egyébként mérünk egyet (de az offsetHeight stabilabb)
-      const height = explicitHeight || document.getElementById('app').offsetHeight;
-      
-      window.parent.postMessage({
-        frameHeight: height
-      }, '*');
-    }
-  }
-  // --- EDDIG ---
+
 };
 </script>
 
