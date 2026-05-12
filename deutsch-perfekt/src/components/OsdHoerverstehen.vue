@@ -1,18 +1,29 @@
 <template>
   <div class="hoeren-layout">
     
-    <div class="audio-panel">
+<div class="audio-panel">
       <div class="panel-header">Audio Player - Aufgabe {{ currentAufgabe }}</div>
       <div class="audio-container">
-        <audio controls class="custom-audio" preload="metadata" :key="audioSource" :src="audioSource">
+        <audio 
+          controls 
+          class="custom-audio" 
+          preload="metadata" 
+          :key="audioSource" 
+          :src="audioSource"
+        >
           A böngésződ nem támogatja az audio elemet.
         </audio>
-        <p class="audio-info" v-if="currentAufgabe === 1">
-          Hallgasd meg a felvételt és oldd meg az 1. feladatot. (A vizsgán ezt 2x hallhatod).
-        </p>
-        <p class="audio-info" v-else>
-          Hallgasd meg a felvételt és oldd meg a 2. feladatot. (A vizsgán ezt 1x hallhatod).
-        </p>
+        
+        <div class="audio-instructions">
+          <p class="audio-info" v-if="currentAufgabe === 1">
+            <strong>Aufgabe 1:</strong> Hallgasd meg a felvételt és oldd meg az 1. feladatot. 
+            <br><small>(A vizsgán ezt 2x hallhatod).</small>
+          </p>
+          <p class="audio-info" v-else>
+            <strong>Aufgabe 2:</strong> Hallgasd meg a felvételt és oldd meg a 2. feladatot. 
+            <br><small>(A vizsgán ezt 1x hallhatod).</small>
+          </p>
+        </div>
       </div>
     </div>
 
@@ -193,13 +204,23 @@ export default {
     };
   },
   computed: {
+    // DINAMIKUS HANGFÁJL ÚTVONAL KEZELÉSE
     audioSource() {
-      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const fileName = this.currentAufgabe === 1 ? 'audio/ZB2_MS_A1_270917.mp3' : 'audio/ZB2_MS_A2_270917.mp3';
-      return (isLocal ? '/' : '/perfekt-und-nomen/') + fileName + '?v=' + Date.now();
+      // 1. Meghatározzuk az alap útvonalat (WordPress plugin mappája vagy helyi '/' )
+      const baseUrl = (window.wpAppVars && window.wpAppVars.pluginUrl) 
+                      ? window.wpAppVars.pluginUrl 
+                      : '/';
+      
+      // 2. Meghatározzuk a fájlnevet
+      const fileName = this.currentAufgabe === 1 
+                       ? 'audio/ZB2_MS_A1_270917.mp3' 
+                       : 'audio/ZB2_MS_A2_270917.mp3';
+      
+      // 3. Összefűzzük és hozzáadunk egy időbélyeget a cache elkerülése végett
+      return baseUrl + fileName + '?v=' + Date.now();
     },
 
-    // AUFGABE 1 PONTSZÁMÍTÁS (PDF 3. oldal alapján)
+    // AUFGABE 1 PONTSZÁMÍTÁS
     scoreA1() {
       let correctCount = 0;
       this.aufgabe1.forEach(task => {
@@ -207,26 +228,22 @@ export default {
           correctCount++;
         }
       });
-      // Ponttáblázat [cite: 165]
       const tableA1 = { 10: 10, 9: 8, 8: 9, 7: 7, 6: 6, 5: 4, 4: 5, 3: 3, 2: 2, 1: 1, 0: 0 };
       return tableA1[correctCount] || 0;
     },
 
-    // AUFGABE 2 PONTSZÁMÍTÁS (PDF 4. oldal alapján)
+    // AUFGABE 2 PONTSZÁMÍTÁS
     scoreA2() {
       let messpunkte = 0;
-      
-      // Szöveges Messpunkte számítása (ahol egyezik, ott +1 pont) [cite: 189]
       const fields = ['kosten', 'ermaessigung', 'dauer', 'max', 'bis'];
       ['uni', 'zb', 'lit'].forEach(lib => {
         fields.forEach(field => {
           if (this.a2[lib][field].trim().toLowerCase() === this.correctAnswersA2[lib][field].toLowerCase()) {
-            messpunkte += 1; // Minden helyes bejegyzés 1 Messpunkt [cite: 189, 171]
+            messpunkte += 1;
           }
         });
       });
 
-      // Messpunkte -> Ergebnispunkte átváltás (PDF 4. oldal táblázata alapján) [cite: 194]
       if (messpunkte >= 43) return 10;
       if (messpunkte >= 40) return 9;
       if (messpunkte >= 37) return 8;
@@ -241,7 +258,7 @@ export default {
     },
 
     totalScore() {
-      return this.scoreA1 + this.scoreA2; // Összesen max 20 pont [cite: 195]
+      return this.scoreA1 + this.scoreA2;
     }
   },
   methods: {
@@ -412,5 +429,23 @@ export default {
   }
   label { display: block !important; margin-bottom: 8px !important; font-size: 0.85rem !important; word-wrap: break-word !important; }
   .error-label, .correct-label { word-wrap: break-word !important; }
+}
+
+/* A fő konténer, ami összefogja a feladatokat */
+.hoeren-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px; /* Vagy amennyit jónak látsz */
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* A konkrét feladatblokkok (Aufgabe 1 és 2) */
+.task-block {
+  width: 100% !important; /* Kényszerítjük, hogy töltse ki a rendelkezésre álló helyet */
+  display: block;
+  margin-bottom: 30px;
+  box-sizing: border-box;
 }
 </style>

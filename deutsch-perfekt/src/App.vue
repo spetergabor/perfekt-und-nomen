@@ -67,6 +67,22 @@ export default {
       currentMode: null, // 'perfekt', 'nomen-verb', 'adjektiv' vagy 'osd'
     };
   },
+  // --- INNENTŐL MÁSOLD ---
+  mounted() {
+    this.sendHeight();
+    // Figyeli, ha bármi változik az app méretében (pl. lenyílik egy menü)
+    const observer = new ResizeObserver(() => this.sendHeight());
+    observer.observe(document.body);
+  },
+  methods: {
+    sendHeight() {
+      // "Kikiabál" az iframe-ből a szülő oldalnak (WordPress)
+      window.parent.postMessage({
+        frameHeight: document.body.scrollHeight
+      }, '*');
+    }
+  }
+  // --- EDDIG ---
 };
 </script>
 
